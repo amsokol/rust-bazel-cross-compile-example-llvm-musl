@@ -1,0 +1,14 @@
+[workspace]
+resolver = "2"
+members = ["rust/hello_world"]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.93.1"
+readme = "README.md"
+
+[workspace.dependencies]
+# Internal crates
+# External crates
+mimalloc = { git = "https://github.com/amsokol/mimalloc", tag = "v2.2.7" }
+tokio = "1.49.0"

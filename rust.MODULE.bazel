@@ -1,0 +1,78 @@
+"""Configuration for Rust toolchains and dependencies.
+
+This module sets up the Rust toolchain with musl targets, LLVM toolchain with
+custom musl sysroots, and required crates for Rust service development.
+"""
+
+sysroot = use_repo_rule("@toolchains_llvm//toolchain:sysroot.bzl", "sysroot")
+
+# INTEL/AMD64 musl sysroot.
+sysroot(
+    name = "sysroot_linux_amd64",
+    sha256 = "56133f1f384d1fb1a10a3abdff50e2d26f28c4a407884403a1906fb97329f49f",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-02-24/musl-1.2.5-linux-6.12.73-sysroot-x86_64.tar.xz"],
+)
+
+# ARM64 musl sysroot.
+sysroot(
+    name = "sysroot_linux_arm64",
+    sha256 = "11f7fe66c9552de1d43af8249389d0923f6f514ef4c3f5ac674d69946b141a50",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-02-24/musl-1.2.5-linux-6.12.73-sysroot-aarch64.tar.xz"],
+)
+
+llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm", dev_dependency = True)
+llvm.toolchain(
+    name = "llvm_toolchain",
+    extra_llvm_distributions = {
+        "LLVM-21.1.8-Linux-ARM64.tar.xz": "65ce0b329514e5643407db2d02a5bd34bf33d159055dafa82825c8385bd01993",
+        "LLVM-21.1.8-Linux-X64.tar.xz": "b3b7f2801d15d50736acea3c73982994d025b01c2f035b91ae3b49d1b575732b",
+        "LLVM-21.1.8-macOS-ARM64.tar.xz": "b95bdd32a33a81ee4d40363aaeb26728a26783fcef26a4d80f65457433ea4669",
+    },
+    llvm_version = "21.1.8",
+)
+llvm.sysroot(
+    name = "llvm_toolchain",
+    label = "@sysroot_linux_amd64//sysroot:sysroot",
+    targets = ["linux-x86_64"],
+)
+llvm.sysroot(
+    name = "llvm_toolchain",
+    label = "@sysroot_linux_arm64//sysroot:sysroot",
+    targets = ["linux-aarch64"],
+)
+use_repo(llvm, "llvm_toolchain")
+
+register_toolchains(
+    "@llvm_toolchain//:all",
+    dev_dependency = True,
+)
+
+RUST_EDITION = "2024"
+
+RUST_VERSION = "1.93.1"
+
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = RUST_EDITION,
+    extra_target_triples = [
+        "aarch64-unknown-linux-musl",
+        "x86_64-unknown-linux-musl",
+    ],
+    versions = [RUST_VERSION],
+)
+use_repo(rust, "rust_toolchains")
+
+register_toolchains("@rust_toolchains//:all")
+
+cargo = use_extension(
+    "@rules_rust//crate_universe:extensions.bzl",
+    "crate",
+)
+cargo.from_cargo(
+    name = "cargo",
+    cargo_lockfile = "//:Cargo.lock",
+    manifests = [
+        "//:Cargo.toml",
+    ],
+)
+use_repo(cargo, "cargo")

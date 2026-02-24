@@ -1,0 +1,14 @@
+"""
+Root Bazel module configuration file that defines dependencies and external repositories.
+"""
+
+module(
+    name = "rust_bazel_cross_compile_example_llvm_musl",
+    version = "0.1.0",
+)
+
+bazel_dep(name = "rules_rust", version = "0.68.1")
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "toolchains_llvm", version = "1.6.0")
+
+include("//:rust.MODULE.bazel")

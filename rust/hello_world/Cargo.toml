@@ -1,0 +1,18 @@
+[package]
+name = "hello_world"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+readme.workspace = true
+
+
+[[bin]]
+name = "hello_world"
+path = "src/main.rs"
+
+
+[dependencies]
+# Internal crates
+# External crates
+mimalloc = { workspace = true }
+tokio = { workspace = true, features = ["full"] }
