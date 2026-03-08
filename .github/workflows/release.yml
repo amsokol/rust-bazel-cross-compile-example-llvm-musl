@@ -35,7 +35,7 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends \
-            git ca-certificates curl libc6-dev
+            git ca-certificates curl
 
       - name: Install Bazelisk
         run: |

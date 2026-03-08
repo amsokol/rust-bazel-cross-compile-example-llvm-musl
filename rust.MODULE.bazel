@@ -20,6 +20,22 @@ sysroot(
     urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-08_1/musl-1.2.5-linux-6.12.76-sysroot-aarch64.tar.xz"],
 )
 
+# Glibc sysroot for exec (host) tools.  Provides libc headers, libgcc_s, and
+# everything the Rust x86_64-unknown-linux-gnu stdlib needs to link, so the
+# build doesn't depend on packages installed on the host system.
+sysroot(
+    name = "sysroot_linux_amd64_glibc",
+    sha256 = "7b829b3e0026bbd90fee9fcd8064f930fb16c0fed6702622c70f57002d23550f",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots/releases/download/2026-03-08/debian-trixie-sysroot-amd64.tar.xz"],
+)
+
+# ARM64 glibc sysroot for exec (host) tools on ARM64 hosts.
+sysroot(
+    name = "sysroot_linux_arm64_glibc",
+    sha256 = "8989499585d8d25ae962d55c530b930a65c7ac0a7976083c9c8422e88c27f864",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots/releases/download/2026-03-08/debian-trixie-sysroot-arm64.tar.xz"],
+)
+
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm", dev_dependency = True)
 llvm.toolchain(
     name = "llvm_toolchain",
@@ -45,10 +61,11 @@ llvm.extra_target_compatible_with(
     constraints = ["//constraints/linker:musl"],
 )
 
-# A second LLVM toolchain without a sysroot for exec (host) tools.
+# A second LLVM toolchain with a glibc sysroot for exec (host) tools.
 # The musl toolchain above won't match exec because exec doesn't have
-# the linker:musl constraint.  This one has no sysroot and no extra
-# constraints, so it matches exec and uses the host's default libc.
+# the linker:musl constraint.  This one uses a glibc sysroot (which
+# provides libgcc_s and all glibc headers the Rust GNU stdlib needs)
+# so the build is fully hermetic with no host-system dependencies.
 llvm.toolchain(
     name = "llvm_toolchain_host",
     extra_llvm_distributions = {
@@ -57,6 +74,16 @@ llvm.toolchain(
         "LLVM-21.1.8-macOS-ARM64.tar.xz": "b95bdd32a33a81ee4d40363aaeb26728a26783fcef26a4d80f65457433ea4669",
     },
     llvm_version = "21.1.8",
+)
+llvm.sysroot(
+    name = "llvm_toolchain_host",
+    label = "@sysroot_linux_amd64_glibc//sysroot:sysroot",
+    targets = ["linux-x86_64"],
+)
+llvm.sysroot(
+    name = "llvm_toolchain_host",
+    label = "@sysroot_linux_arm64_glibc//sysroot:sysroot",
+    targets = ["linux-aarch64"],
 )
 
 use_repo(llvm, "llvm_toolchain", "llvm_toolchain_host")
