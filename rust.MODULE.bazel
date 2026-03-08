@@ -9,15 +9,15 @@ sysroot = use_repo_rule("@toolchains_llvm//toolchain:sysroot.bzl", "sysroot")
 # INTEL/AMD64 musl sysroot.
 sysroot(
     name = "sysroot_linux_amd64",
-    sha256 = "250d132b1390f7862002205d7417d88775b3b56daef478333e95a0185ad3f7e6",
-    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-06/musl-1.2.5-linux-6.12.76-sysroot-x86_64.tar.xz"],
+    sha256 = "9a71477588ce2a18909650b33bbeed894bdc8edd191f0323a638de87376e982d",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-08/musl-1.2.5-linux-6.12.76-sysroot-x86_64.tar.xz"],
 )
 
 # ARM64 musl sysroot.
 sysroot(
     name = "sysroot_linux_arm64",
-    sha256 = "d075cfecc34fb9fc38da89877a0ff88e9a1eafbf54f93355739ce9956413b072",
-    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-06/musl-1.2.5-linux-6.12.76-sysroot-aarch64.tar.xz"],
+    sha256 = "5aba8251f837d3f491397ad824db2af966da6245ca3f52974118e92393891dcf",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-08/musl-1.2.5-linux-6.12.76-sysroot-aarch64.tar.xz"],
 )
 
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm", dev_dependency = True)
