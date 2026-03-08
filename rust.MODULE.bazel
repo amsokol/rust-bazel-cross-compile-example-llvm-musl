@@ -44,10 +44,28 @@ llvm.extra_target_compatible_with(
     name = "llvm_toolchain",
     constraints = ["//constraints/linker:musl"],
 )
-use_repo(llvm, "llvm_toolchain")
 
+# A second LLVM toolchain without a sysroot for exec (host) tools.
+# The musl toolchain above won't match exec because exec doesn't have
+# the linker:musl constraint.  This one has no sysroot and no extra
+# constraints, so it matches exec and uses the host's default libc.
+llvm.toolchain(
+    name = "llvm_toolchain_host",
+    extra_llvm_distributions = {
+        "LLVM-21.1.8-Linux-ARM64.tar.xz": "65ce0b329514e5643407db2d02a5bd34bf33d159055dafa82825c8385bd01993",
+        "LLVM-21.1.8-Linux-X64.tar.xz": "b3b7f2801d15d50736acea3c73982994d025b01c2f035b91ae3b49d1b575732b",
+        "LLVM-21.1.8-macOS-ARM64.tar.xz": "b95bdd32a33a81ee4d40363aaeb26728a26783fcef26a4d80f65457433ea4669",
+    },
+    llvm_version = "21.1.8",
+)
+
+use_repo(llvm, "llvm_toolchain", "llvm_toolchain_host")
+
+# Register musl toolchain first (higher priority for musl targets),
+# then host toolchain as fallback for exec.
 register_toolchains(
     "@llvm_toolchain//:all",
+    "@llvm_toolchain_host//:all",
     dev_dependency = True,
 )
 
