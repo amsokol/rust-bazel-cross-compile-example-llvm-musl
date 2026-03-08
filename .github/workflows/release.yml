@@ -12,6 +12,8 @@ jobs:
   build:
     name: Build ${{ matrix.target }}
     runs-on: ubuntu-24.04
+    container:
+      image: debian:13
 
     strategy:
       fail-fast: false
@@ -29,6 +31,18 @@ jobs:
             artifact: hello_world-linux-arm64
 
     steps:
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            git ca-certificates curl
+
+      - name: Install Bazelisk
+        run: |
+          curl -Lo /usr/local/bin/bazel \
+            https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64
+          chmod +x /usr/local/bin/bazel
+
       - name: Checkout
         uses: actions/checkout@v4
 
