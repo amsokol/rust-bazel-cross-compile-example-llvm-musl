@@ -9,15 +9,15 @@ sysroot = use_repo_rule("@toolchains_llvm//toolchain:sysroot.bzl", "sysroot")
 # INTEL/AMD64 musl sysroot.
 sysroot(
     name = "sysroot_linux_amd64",
-    sha256 = "9a71477588ce2a18909650b33bbeed894bdc8edd191f0323a638de87376e982d",
-    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-08/musl-1.2.5-linux-6.12.76-sysroot-x86_64.tar.xz"],
+    sha256 = "c8c1e39d6ba327922df8666c75a6e642bfbe21285bcfe2dad51ac5c9346bbbcd",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-08_1/musl-1.2.5-linux-6.12.76-sysroot-x86_64.tar.xz"],
 )
 
 # ARM64 musl sysroot.
 sysroot(
     name = "sysroot_linux_arm64",
-    sha256 = "5aba8251f837d3f491397ad824db2af966da6245ca3f52974118e92393891dcf",
-    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-08/musl-1.2.5-linux-6.12.76-sysroot-aarch64.tar.xz"],
+    sha256 = "5ce018d94cada71d177be5cfa43485cf4797fff9ce03437f27a30a2d2fbd5afe",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-08_1/musl-1.2.5-linux-6.12.76-sysroot-aarch64.tar.xz"],
 )
 
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm", dev_dependency = True)
@@ -40,6 +40,10 @@ llvm.sysroot(
     label = "@sysroot_linux_arm64//sysroot:sysroot",
     targets = ["linux-aarch64"],
 )
+llvm.extra_target_compatible_with(
+    name = "llvm_toolchain",
+    constraints = ["//constraints/linker:musl"],
+)
 use_repo(llvm, "llvm_toolchain")
 
 register_toolchains(
@@ -60,6 +64,42 @@ rust.toolchain(
     ],
     versions = [RUST_VERSION],
 )
+
+# Override the default rust_linux_x86_64 repository set so that musl Rust
+# toolchains require the //constraints/linker:musl constraint.  This prevents
+# Bazel from selecting the musl Rust toolchain for exec (host) builds while
+# keeping it available for cross-compilation targets.
+rust.repository_set(
+    name = "rust_linux_x86_64",
+    edition = RUST_EDITION,
+    exec_triple = "x86_64-unknown-linux-gnu",
+    target_compatible_with = [
+        "//constraints/linker:unknown",
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+    target_triple = "x86_64-unknown-linux-gnu",
+    versions = [RUST_VERSION],
+)
+rust.repository_set(
+    name = "rust_linux_x86_64",
+    target_compatible_with = [
+        "//constraints/linker:musl",
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+    target_triple = "x86_64-unknown-linux-musl",
+)
+rust.repository_set(
+    name = "rust_linux_x86_64",
+    target_compatible_with = [
+        "//constraints/linker:musl",
+        "@platforms//cpu:aarch64",
+        "@platforms//os:linux",
+    ],
+    target_triple = "aarch64-unknown-linux-musl",
+)
+
 use_repo(rust, "rust_toolchains")
 
 register_toolchains("@rust_toolchains//:all")

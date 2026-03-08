@@ -28,6 +28,7 @@ platform(
     constraint_values = [
         "@platforms//os:linux",
         "@platforms//cpu:x86_64",
+        "//constraints/linker:musl",
     ],
     visibility = ["//visibility:public"],
 )
@@ -38,6 +39,7 @@ platform(
         constraint_values = [
             "@platforms//os:linux",
             "@platforms//cpu:x86_64",
+            "//constraints/linker:musl",
             "//constraints/amd64:%s" % v,
         ],
         visibility = ["//visibility:public"],
@@ -60,6 +62,7 @@ platform(
     constraint_values = [
         "@platforms//os:linux",
         "@platforms//cpu:aarch64",
+        "//constraints/linker:musl",
     ],
     visibility = ["//visibility:public"],
 )
@@ -70,6 +73,7 @@ platform(
         constraint_values = [
             "@platforms//os:linux",
             "@platforms//cpu:aarch64",
+            "//constraints/linker:musl",
             "//constraints/arm64:%s" % v,
         ],
         visibility = ["//visibility:public"],
