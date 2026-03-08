@@ -110,10 +110,11 @@ rust.toolchain(
     versions = [RUST_VERSION],
 )
 
-# Override the default rust_linux_x86_64 repository set so that musl Rust
-# toolchains require the //constraints/linker:musl constraint.  This prevents
-# Bazel from selecting the musl Rust toolchain for exec (host) builds while
+# Override the default Rust repository sets so that musl Rust toolchains
+# require the //constraints/linker:musl constraint.  This prevents Bazel
+# from selecting the musl Rust toolchain for exec (host) builds while
 # keeping it available for cross-compilation targets.
+# macOS hosts need no override -- the OS constraint naturally separates them.
 rust.repository_set(
     name = "rust_linux_x86_64",
     edition = RUST_EDITION,
@@ -144,6 +145,38 @@ rust.repository_set(
     ],
     target_triple = "aarch64-unknown-linux-musl",
 )
+
+rust.repository_set(
+    name = "rust_linux_aarch64",
+    edition = RUST_EDITION,
+    exec_triple = "aarch64-unknown-linux-gnu",
+    target_compatible_with = [
+        "//constraints/linker:unknown",
+        "@platforms//cpu:aarch64",
+        "@platforms//os:linux",
+    ],
+    target_triple = "aarch64-unknown-linux-gnu",
+    versions = [RUST_VERSION],
+)
+rust.repository_set(
+    name = "rust_linux_aarch64",
+    target_compatible_with = [
+        "//constraints/linker:musl",
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+    target_triple = "x86_64-unknown-linux-musl",
+)
+rust.repository_set(
+    name = "rust_linux_aarch64",
+    target_compatible_with = [
+        "//constraints/linker:musl",
+        "@platforms//cpu:aarch64",
+        "@platforms//os:linux",
+    ],
+    target_triple = "aarch64-unknown-linux-musl",
+)
+
 use_repo(rust, "rust_toolchains")
 
 register_toolchains("@rust_toolchains//:all")

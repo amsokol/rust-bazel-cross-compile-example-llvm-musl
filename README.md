@@ -2,6 +2,10 @@
 
 Cross-compile Rust binaries for Linux using **LLVM/Clang/lld** with **musl libc** sysroots, producing fully **static** Linux binaries with no runtime dependencies.
 
+## Supported host platforms
+
+Builds from **macOS** (arm64), **Linux x86_64**, and **Linux aarch64** hosts. Cross-compiles to both `x86_64-unknown-linux-musl` and `aarch64-unknown-linux-musl` targets from any host.
+
 ## Why LLVM + musl?
 
 - **LLVM/Clang/lld** -- fast linking, native cross-compilation, single toolchain for all targets
@@ -76,7 +80,8 @@ See `constraints/arm64/defs.bzl` for the full list (v8.1a through v9.6a).
 ├── settings.bzl           # Rust compiler flags
 ├── constraints/
 │   ├── amd64/             # x86-64 microarch levels (v2, v3, v4)
-│   └── arm64/             # AArch64 ISA versions (v8.1a – v9.6a)
+│   ├── arm64/             # AArch64 ISA versions (v8.1a – v9.6a)
+│   └── linker/            # Linker constraint (musl vs unknown)
 ├── rust/
 │   └── hello_world/       # Example binary (mimalloc + tokio)
 ├── Cargo.toml             # Workspace manifest
@@ -91,8 +96,17 @@ See `constraints/arm64/defs.bzl` for the full list (v8.1a through v9.6a).
 | rules_rust      | 0.68.1                         |
 | toolchains_llvm | 1.6.0                          |
 | LLVM            | 21.1.8                         |
-| Rust            | 1.93.1 (edition 2024)          |
-| musl sysroot    | 1.2.5 (kernel headers 6.12.73) |
+| Rust            | 1.94.0 (edition 2024)          |
+| musl sysroot    | 1.2.5 (kernel headers 6.12.76) |
+
+## Toolchain architecture
+
+Two LLVM CC toolchains work together:
+
+- **`llvm_toolchain`** (musl sysroot, `stdlib = "none"`) -- used for **target** builds only, constrained to platforms with `//constraints/linker:musl`. Produces fully static musl binaries.
+- **`llvm_toolchain_host`** (glibc sysroot) -- used for **exec** (host) builds. Provides `libgcc_s` and glibc headers so the Rust GNU stdlib links hermetically without depending on host-installed packages.
+
+Custom `linker` constraints (`constraints/linker/`) and `rust.repository_set` overrides prevent Bazel from selecting musl Rust toolchains for exec builds on Linux hosts. macOS hosts are naturally separated by the OS constraint.
 
 ## Comparison with glibc variant
 
