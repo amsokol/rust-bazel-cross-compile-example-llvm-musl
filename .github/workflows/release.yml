@@ -9,8 +9,58 @@ permissions:
   contents: write
 
 jobs:
-  build:
-    name: Build ${{ matrix.target }}
+  test:
+    name: Test (${{ matrix.host }})
+    runs-on: ${{ matrix.runner }}
+    container: ${{ matrix.container || '' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - host: linux-amd64
+            runner: ubuntu-24.04
+            container: debian:13
+            bazelisk: bazelisk-linux-amd64
+          - host: linux-arm64
+            runner: ubuntu-24.04-arm
+            container: debian:13
+            bazelisk: bazelisk-linux-arm64
+          - host: macos-arm64
+            runner: macos-latest
+            bazelisk: bazelisk-darwin-arm64
+
+    steps:
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            git ca-certificates curl libxml2
+
+      - name: Install Bazelisk (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          curl -fLo /usr/local/bin/bazel \
+            "https://github.com/bazelbuild/bazelisk/releases/latest/download/${{ matrix.bazelisk }}"
+          chmod +x /usr/local/bin/bazel
+
+      - name: Install Bazelisk (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          curl -fLo /tmp/bazel \
+            "https://github.com/bazelbuild/bazelisk/releases/latest/download/${{ matrix.bazelisk }}"
+          sudo install /tmp/bazel /usr/local/bin/bazel
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build all targets
+        run: bazel build //...
+
+  release:
+    name: Release ${{ matrix.target }}
+    if: github.event_name == 'release'
+    needs: test
     runs-on: ubuntu-24.04
     container:
       image: debian:13
@@ -53,7 +103,6 @@ jobs:
         run: cp bazel-bin/rust/hello_world/${{ matrix.target }} ${{ matrix.artifact }}
 
       - name: Upload release assets
-        if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.release.tag_name }}
