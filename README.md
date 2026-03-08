@@ -93,7 +93,7 @@ See `constraints/arm64/defs.bzl` for the full list (v8.1a through v9.6a).
 | Component       | Version                        |
 | --------------- | ------------------------------ |
 | Bazel           | 9.0.0                          |
-| rules_rust      | 0.68.1                         |
+| rules_rust      | 0.69.0                         |
 | toolchains_llvm | 1.6.0                          |
 | LLVM            | 21.1.8                         |
 | Rust            | 1.94.0 (edition 2024)          |
