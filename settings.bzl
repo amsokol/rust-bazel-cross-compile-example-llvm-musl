@@ -21,8 +21,6 @@ _BUILD_FLAGS_DEBUG = [
 
 _BUILD_FLAGS_RELEASE = [
     "-Ccodegen-units=1",
-    "-Cembed-bitcode=yes",
-    "-Clto=thin",
     "-Copt-level=3",
     "-Cpanic=abort",
     "-Cstrip=symbols",
