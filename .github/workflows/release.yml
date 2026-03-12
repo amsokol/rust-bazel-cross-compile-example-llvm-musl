@@ -55,7 +55,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Build all targets
-        run: bazel build //...
+        run: bazel build -c opt //...
 
   release:
     name: Release ${{ matrix.target }}
@@ -97,7 +97,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Build
-        run: bazel build //rust/hello_world:${{ matrix.target }}
+        run: bazel build -c opt //rust/hello_world:${{ matrix.target }}
 
       - name: Prepare artifact
         run: cp bazel-bin/rust/hello_world/${{ matrix.target }} ${{ matrix.artifact }}
