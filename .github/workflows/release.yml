@@ -52,7 +52,7 @@ jobs:
           sudo install /tmp/bazel /usr/local/bin/bazel
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build all targets
         run: bazel build //...
@@ -94,7 +94,7 @@ jobs:
           chmod +x /usr/local/bin/bazel
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build
         run: bazel build //rust/hello_world:${{ matrix.target }}
@@ -103,7 +103,14 @@ jobs:
         run: cp bazel-bin/rust/hello_world/${{ matrix.target }} ${{ matrix.artifact }}
 
       - name: Upload release assets
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.event.release.tag_name }}
-          files: ${{ matrix.artifact }}
+        if: github.event_name == 'release'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          echo "Uploading ${{ matrix.artifact }}..."
+          curl -sL --fail-with-body \
+            -X POST \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Content-Type: application/octet-stream" \
+            --data-binary @"${{ matrix.artifact }}" \
+            "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}/assets?name=${{ matrix.artifact }}"

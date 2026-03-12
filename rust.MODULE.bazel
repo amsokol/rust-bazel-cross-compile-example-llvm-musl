@@ -9,15 +9,15 @@ sysroot = use_repo_rule("@toolchains_llvm//toolchain:sysroot.bzl", "sysroot")
 # INTEL/AMD64 musl sysroot.
 sysroot(
     name = "sysroot_linux_amd64",
-    sha256 = "9c83d10724bed4a077dca35fb67f5ea46c16dcf53087b5b95cbc3417095fa526",
-    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-08_3/musl-1.2.5-linux-6.12.76-sysroot-x86_64.tar.xz"],
+    sha256 = "a19058f7dfb007778392eafd55c742554c7825e43592f1223501fce0fbd965ac",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-12/musl-1.2.5-linux-6.12.76-sysroot-x86_64.tar.xz"],
 )
 
 # ARM64 musl sysroot.
 sysroot(
     name = "sysroot_linux_arm64",
-    sha256 = "714144554d2d66700f0dd0a44dfa1335d8ea13e0fce3882603493d153c13b45c",
-    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-08_3/musl-1.2.5-linux-6.12.76-sysroot-aarch64.tar.xz"],
+    sha256 = "073d659dbddf6cde7f07aa4d0f2af8a09e26a26d341b3137186ca0eb75ab3c74",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-12/musl-1.2.5-linux-6.12.76-sysroot-aarch64.tar.xz"],
 )
 
 # Glibc sysroot for exec (host) tools.  Provides libc headers, libgcc_s, and
@@ -145,7 +145,6 @@ rust.repository_set(
     ],
     target_triple = "aarch64-unknown-linux-musl",
 )
-
 rust.repository_set(
     name = "rust_linux_aarch64",
     edition = RUST_EDITION,
@@ -176,7 +175,6 @@ rust.repository_set(
     ],
     target_triple = "aarch64-unknown-linux-musl",
 )
-
 use_repo(rust, "rust_toolchains")
 
 register_toolchains("@rust_toolchains//:all")
