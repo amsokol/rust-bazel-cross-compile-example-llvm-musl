@@ -21,6 +21,7 @@ _BUILD_FLAGS_DEBUG = [
 
 _BUILD_FLAGS_RELEASE = [
     "-Ccodegen-units=1",
+    "-Clinker-plugin-lto",
     "-Copt-level=3",
     "-Cpanic=abort",
     "-Cstrip=symbols",
