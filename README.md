@@ -92,12 +92,12 @@ See `constraints/arm64/defs.bzl` for the full list (v8.1a through v9.6a).
 
 | Component       | Version                        |
 | --------------- | ------------------------------ |
-| Bazel           | 9.0.0                          |
+| Bazel           | 9.0.1                          |
 | rules_rust      | 0.69.0                         |
 | toolchains_llvm | 1.6.0                          |
 | LLVM            | 21.1.8                         |
 | Rust            | 1.94.0 (edition 2024)          |
-| musl sysroot    | 1.2.5 (kernel headers 6.12.76) |
+| musl sysroot    | 1.2.6 (kernel headers 6.12.77) |
 
 ## Toolchain architecture
 
@@ -114,7 +114,7 @@ This project is the **musl** counterpart of [rust-bazel-cross-compile-example-ll
 
 |                | LLVM + glibc                                         | LLVM + musl                |
 | -------------- | ---------------------------------------------------- | -------------------------- |
-| Sysroot        | Debian Trixie                                        | Custom musl 1.2.5          |
+| Sysroot        | Debian Trixie                                        | Custom musl 1.2.6          |
 | Static linking | Requires `--defsym` workaround for lld IRELATIVE bug | Works cleanly              |
 | Binary size    | Larger (glibc is bigger)                             | Smaller                    |
 | Runtime deps   | May need `ld-linux-*.so`                             | None (fully static)        |

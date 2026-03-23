@@ -9,15 +9,15 @@ sysroot = use_repo_rule("@toolchains_llvm//toolchain:sysroot.bzl", "sysroot")
 # INTEL/AMD64 musl sysroot.
 sysroot(
     name = "sysroot_linux_amd64",
-    sha256 = "a19058f7dfb007778392eafd55c742554c7825e43592f1223501fce0fbd965ac",
-    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-12/musl-1.2.5-linux-6.12.76-sysroot-x86_64.tar.xz"],
+    sha256 = "06f0b974c855f0f728a8de0aec0a21534ee22f1716e8048389ae5e01df2f0189",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-23/musl-1.2.6-linux-6.12.77-sysroot-x86_64.tar.xz"],
 )
 
 # ARM64 musl sysroot.
 sysroot(
     name = "sysroot_linux_arm64",
-    sha256 = "073d659dbddf6cde7f07aa4d0f2af8a09e26a26d341b3137186ca0eb75ab3c74",
-    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-12/musl-1.2.5-linux-6.12.76-sysroot-aarch64.tar.xz"],
+    sha256 = "71844e82e53eb508927761dacd6d979451139ea7e8bacd3577b32b5774c67358",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-23/musl-1.2.6-linux-6.12.77-sysroot-aarch64.tar.xz"],
 )
 
 # Glibc sysroot for exec (host) tools.  Provides libc headers, libgcc_s, and
@@ -25,15 +25,15 @@ sysroot(
 # build doesn't depend on packages installed on the host system.
 sysroot(
     name = "sysroot_linux_amd64_glibc",
-    sha256 = "7b829b3e0026bbd90fee9fcd8064f930fb16c0fed6702622c70f57002d23550f",
-    urls = ["https://github.com/amsokol/cross-compilation-sysroots/releases/download/2026-03-08/debian-trixie-sysroot-amd64.tar.xz"],
+    sha256 = "b7ef3bf73727a065eca23a36c4b498de7f84d6aa7350c8e6af65c5a1fd1f881f",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots/releases/download/2026-03-23/debian-trixie-sysroot-amd64.tar.xz"],
 )
 
 # ARM64 glibc sysroot for exec (host) tools on ARM64 hosts.
 sysroot(
     name = "sysroot_linux_arm64_glibc",
-    sha256 = "8989499585d8d25ae962d55c530b930a65c7ac0a7976083c9c8422e88c27f864",
-    urls = ["https://github.com/amsokol/cross-compilation-sysroots/releases/download/2026-03-08/debian-trixie-sysroot-arm64.tar.xz"],
+    sha256 = "5afc2584bd215704a9ac179bb2a55bb48e17ccda7812b56b3413bdf055ca720f",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots/releases/download/2026-03-23/debian-trixie-sysroot-arm64.tar.xz"],
 )
 
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm", dev_dependency = True)

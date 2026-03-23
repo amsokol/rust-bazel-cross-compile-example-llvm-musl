@@ -4,7 +4,7 @@ Root Bazel module configuration file that defines dependencies and external repo
 
 module(
     name = "rust_bazel_cross_compile_example_llvm_musl",
-    version = "0.4.0",
+    version = "0.5.0",
 )
 
 bazel_dep(name = "rules_rust", version = "0.69.0")
