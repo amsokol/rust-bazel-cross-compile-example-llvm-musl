@@ -4,11 +4,11 @@ members = ["rust/hello_world"]
 
 [workspace.package]
 edition = "2024"
-rust-version = "1.94.0"
+rust-version = "1.95.0"
 readme = "README.md"
 
 [workspace.dependencies]
 # Internal crates
 # External crates
-mimalloc = { git = "https://github.com/amsokol/mimalloc", tag = "v2.2.7" }
-tokio = "1.50.0"
+mimalloc = { git = "https://github.com/amsokol/mimalloc", tag = "v3.3.1" }
+tokio = "1.52.1"

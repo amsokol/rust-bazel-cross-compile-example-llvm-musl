@@ -92,12 +92,12 @@ See `constraints/arm64/defs.bzl` for the full list (v8.1a through v9.6a).
 
 | Component       | Version                        |
 | --------------- | ------------------------------ |
-| Bazel           | 9.0.1                          |
-| rules_rust      | 0.69.0                         |
-| toolchains_llvm | 1.6.0                          |
-| LLVM            | 21.1.8                         |
-| Rust            | 1.94.0 (edition 2024)          |
-| musl sysroot    | 1.2.6 (kernel headers 6.12.77) |
+| Bazel           | 9.1.0                          |
+| rules_rust      | 0.70.0                         |
+| toolchains_llvm | 1.7.0                          |
+| LLVM            | 22.1.4                         |
+| Rust            | 1.95.0 (edition 2024)          |
+| musl sysroot    | 1.2.6 (kernel headers 6.12.82) |
 
 ## Toolchain architecture
 

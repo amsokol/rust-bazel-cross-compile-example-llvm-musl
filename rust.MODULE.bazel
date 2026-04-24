@@ -9,15 +9,15 @@ sysroot = use_repo_rule("@toolchains_llvm//toolchain:sysroot.bzl", "sysroot")
 # INTEL/AMD64 musl sysroot.
 sysroot(
     name = "sysroot_linux_amd64",
-    sha256 = "06f0b974c855f0f728a8de0aec0a21534ee22f1716e8048389ae5e01df2f0189",
-    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-23/musl-1.2.6-linux-6.12.77-sysroot-x86_64.tar.xz"],
+    sha256 = "953318cf5bd6d42fcd59643155db195daf6b6c9ea387f54f2340de6e91f24225",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-04-24/musl-1.2.6-linux-6.12.82-sysroot-x86_64.tar.xz"],
 )
 
 # ARM64 musl sysroot.
 sysroot(
     name = "sysroot_linux_arm64",
-    sha256 = "71844e82e53eb508927761dacd6d979451139ea7e8bacd3577b32b5774c67358",
-    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-03-23/musl-1.2.6-linux-6.12.77-sysroot-aarch64.tar.xz"],
+    sha256 = "5e64bf038bacf066f50a060446edead527df1de9a720326aa85a5e1e2e252034",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots-musl/releases/download/2026-04-24/musl-1.2.6-linux-6.12.82-sysroot-aarch64.tar.xz"],
 )
 
 # Glibc sysroot for exec (host) tools.  Provides libc headers, libgcc_s, and
@@ -25,26 +25,26 @@ sysroot(
 # build doesn't depend on packages installed on the host system.
 sysroot(
     name = "sysroot_linux_amd64_glibc",
-    sha256 = "b7ef3bf73727a065eca23a36c4b498de7f84d6aa7350c8e6af65c5a1fd1f881f",
-    urls = ["https://github.com/amsokol/cross-compilation-sysroots/releases/download/2026-03-23/debian-trixie-sysroot-amd64.tar.xz"],
+    sha256 = "227ce21d631774420046065dee4080c001a9e09e6ef01bb4a5e9d73a6701fe41",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots/releases/download/2026-04-24/debian-trixie-sysroot-amd64.tar.xz"],
 )
 
 # ARM64 glibc sysroot for exec (host) tools on ARM64 hosts.
 sysroot(
     name = "sysroot_linux_arm64_glibc",
-    sha256 = "5afc2584bd215704a9ac179bb2a55bb48e17ccda7812b56b3413bdf055ca720f",
-    urls = ["https://github.com/amsokol/cross-compilation-sysroots/releases/download/2026-03-23/debian-trixie-sysroot-arm64.tar.xz"],
+    sha256 = "61578c90b6230dc3ade24a08a7961f6a967f56aea0568d044b35ca245eec7941",
+    urls = ["https://github.com/amsokol/cross-compilation-sysroots/releases/download/2026-04-24/debian-trixie-sysroot-arm64.tar.xz"],
 )
 
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm", dev_dependency = True)
 llvm.toolchain(
     name = "llvm_toolchain",
     extra_llvm_distributions = {
-        "LLVM-21.1.8-Linux-ARM64.tar.xz": "65ce0b329514e5643407db2d02a5bd34bf33d159055dafa82825c8385bd01993",
-        "LLVM-21.1.8-Linux-X64.tar.xz": "b3b7f2801d15d50736acea3c73982994d025b01c2f035b91ae3b49d1b575732b",
-        "LLVM-21.1.8-macOS-ARM64.tar.xz": "b95bdd32a33a81ee4d40363aaeb26728a26783fcef26a4d80f65457433ea4669",
+        "LLVM-22.1.4-Linux-ARM64.tar.xz": "ac8bed48a6481ccc0e14af18f64d44fc1ca8c0ccf630c1d4dc5e97027e87e6fa",
+        "LLVM-22.1.4-Linux-X64.tar.xz": "cdf232e3bc5d9909ddcf8cb7016802c6745a01e69a596747c684caa894a11567",
+        "LLVM-22.1.4-macOS-ARM64.tar.xz": "45e0dfc0453624caed5e7b20e224ce8343af9c511c7f59803753a586620d6ad1",
     },
-    llvm_version = "21.1.8",
+    llvm_version = "22.1.4",
     stdlib = {"": "none"},
 )
 llvm.sysroot(
@@ -70,11 +70,11 @@ llvm.extra_target_compatible_with(
 llvm.toolchain(
     name = "llvm_toolchain_host",
     extra_llvm_distributions = {
-        "LLVM-21.1.8-Linux-ARM64.tar.xz": "65ce0b329514e5643407db2d02a5bd34bf33d159055dafa82825c8385bd01993",
-        "LLVM-21.1.8-Linux-X64.tar.xz": "b3b7f2801d15d50736acea3c73982994d025b01c2f035b91ae3b49d1b575732b",
-        "LLVM-21.1.8-macOS-ARM64.tar.xz": "b95bdd32a33a81ee4d40363aaeb26728a26783fcef26a4d80f65457433ea4669",
+        "LLVM-22.1.4-Linux-ARM64.tar.xz": "ac8bed48a6481ccc0e14af18f64d44fc1ca8c0ccf630c1d4dc5e97027e87e6fa",
+        "LLVM-22.1.4-Linux-X64.tar.xz": "cdf232e3bc5d9909ddcf8cb7016802c6745a01e69a596747c684caa894a11567",
+        "LLVM-22.1.4-macOS-ARM64.tar.xz": "45e0dfc0453624caed5e7b20e224ce8343af9c511c7f59803753a586620d6ad1",
     },
-    llvm_version = "21.1.8",
+    llvm_version = "22.1.4",
 )
 llvm.sysroot(
     name = "llvm_toolchain_host",
@@ -98,7 +98,7 @@ register_toolchains(
 
 RUST_EDITION = "2024"
 
-RUST_VERSION = "1.94.0"
+RUST_VERSION = "1.95.0"
 
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 rust.toolchain(
