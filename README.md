@@ -13,6 +13,23 @@ Builds from **macOS** (arm64), **Linux x86_64**, and **Linux aarch64** hosts. Cr
 - **Static binaries** -- zero runtime dependencies, ideal for containers and scratch Docker images
 - **mimalloc** -- high-performance allocator, compiles cleanly against musl
 
+## Host prerequisites (Linux)
+
+The prebuilt LLVM `ld.lld` linker is dynamically linked against **`libxml2.so.2`**. On most Linux distros, install the runtime library before building:
+
+```bash
+# Debian / Ubuntu 24.04 and earlier
+sudo apt install libxml2
+```
+
+On **Ubuntu 26.04+**, the `libxml2` package was renamed to `libxml2-16` and the library soname changed from `libxml2.so.2` to `libxml2.so.16`. The old package name no longer exists (`apt install libxml2` fails with "no installation candidate"), and the new package does not satisfy `ld.lld` out of the box. Workaround:
+
+```bash
+sudo ln -s /usr/lib/x86_64-linux-gnu/libxml2.so.16 /usr/lib/x86_64-linux-gnu/libxml2.so.2
+```
+
+This is a host **tool** runtime dependency only — the cross-compiled musl binaries remain fully static with no runtime deps.
+
 ## Build
 
 ### Host build (macOS / native)
@@ -92,19 +109,20 @@ See `constraints/arm64/defs.bzl` for the full list (v8.1a through v9.6a).
 
 | Component       | Version                        |
 | --------------- | ------------------------------ |
-| Bazel           | 9.1.0                          |
-| rules_rust      | 0.70.0                         |
+| Bazel           | 9.1.1                          |
+| rules_rust      | 0.71.3                         |
 | toolchains_llvm | 1.7.0                          |
-| LLVM            | 22.1.4                         |
-| Rust            | 1.95.0 (edition 2024)          |
-| musl sysroot    | 1.2.6 (kernel headers 6.12.82) |
+| platforms       | 1.1.0                          |
+| LLVM            | 22.1.8                         |
+| Rust            | 1.97.0 (edition 2024)          |
+| musl sysroot    | 1.2.6 (kernel headers 6.12.95) |
 
 ## Toolchain architecture
 
 Two LLVM CC toolchains work together:
 
 - **`llvm_toolchain`** (musl sysroot, `stdlib = "none"`) -- used for **target** builds only, constrained to platforms with `//constraints/linker:musl`. Produces fully static musl binaries.
-- **`llvm_toolchain_host`** (glibc sysroot) -- used for **exec** (host) builds. Provides `libgcc_s` and glibc headers so the Rust GNU stdlib links hermetically without depending on host-installed packages.
+- **`llvm_toolchain_host`** (glibc sysroot) -- used for **exec** (host) builds. Provides `libgcc_s` and glibc headers so the Rust GNU stdlib links hermetically without depending on host-installed packages. The LLVM `ld.lld` binary itself still requires `libxml2.so.2` on the host (see [Host prerequisites](#host-prerequisites-linux)).
 
 Custom `linker` constraints (`constraints/linker/`) and `rust.repository_set` overrides prevent Bazel from selecting musl Rust toolchains for exec builds on Linux hosts. macOS hosts are naturally separated by the OS constraint.
 
