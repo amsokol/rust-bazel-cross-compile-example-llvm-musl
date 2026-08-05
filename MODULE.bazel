@@ -4,11 +4,11 @@ Root Bazel module configuration file that defines dependencies and external repo
 
 module(
     name = "rust_bazel_cross_compile_example_llvm_musl",
-    version = "0.6.0",
+    version = "0.6.1",
 )
 
-bazel_dep(name = "rules_rust", version = "0.71.3")
+bazel_dep(name = "rules_rust", version = "0.73.0")
 bazel_dep(name = "platforms", version = "1.1.0")
-bazel_dep(name = "toolchains_llvm", version = "1.7.0")  # 1.8.0 breaks cargo_build_script (redacted_dates.h); see toolchains_llvm#771
+bazel_dep(name = "toolchains_llvm", version = "1.8.0")  # 1.8.0 breaks cargo_build_script (redacted_dates.h); see toolchains_llvm#771
 
 include("//:rust.MODULE.bazel")

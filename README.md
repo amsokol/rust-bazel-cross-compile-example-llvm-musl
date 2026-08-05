@@ -107,15 +107,15 @@ See `constraints/arm64/defs.bzl` for the full list (v8.1a through v9.6a).
 
 ## Dependencies
 
-| Component       | Version                        |
-| --------------- | ------------------------------ |
-| Bazel           | 9.1.1                          |
-| rules_rust      | 0.71.3                         |
-| toolchains_llvm | 1.7.0                          |
-| platforms       | 1.1.0                          |
-| LLVM            | 22.1.8                         |
-| Rust            | 1.97.0 (edition 2024)          |
-| musl sysroot    | 1.2.6 (kernel headers 6.12.95) |
+| Component       | Version                         |
+| --------------- | ------------------------------- |
+| Bazel           | 9.2.0                           |
+| rules_rust      | 0.73.0                          |
+| toolchains_llvm | 1.8.0                           |
+| platforms       | 1.1.0                           |
+| LLVM            | 22.1.8                          |
+| Rust            | 1.97.1 (edition 2024)           |
+| musl sysroot    | 1.2.6 (kernel headers 6.12.101) |
 
 ## Toolchain architecture
 
